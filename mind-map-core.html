@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CORE Framework Interactive Map</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; background: #fafafa; }
+    #mindmap { width: 100vw; height: 100vh; }
+    .nav-hint { position: absolute; top: 20px; left: 20px; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 5px solid #2ecc71; z-index: 10; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+  <div class="nav-hint">
+    <strong>CORE Framework Guide:</strong><br>
+    • Click <strong>circles</strong> to Expand/Collapse<br>
+    • <strong>Drag</strong> to move | <strong>Scroll</strong> to zoom
+  </div>
+
+  <svg id="mindmap"></svg>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.14.4/dist/browser/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.14.4/dist/index.min.js"></script>
+
+  <script>
+    // FIX: Using the explicit global access to avoid the "derive" error
+    const transformer = new markmap.Transformer();
+    
+    const markdown = `
+# CORE Framework
+## 🛡️ Assessment Engine
+### Item Response Theory (IRT)
+### Computerized Adaptive Testing (CAT)
+### Ability vs. Precision Metrics
+## 🚀 Assessment Journey
+### Level-1: MCQ Phase
+#### Proctored & Anti-Cheat
+### Level-2: Descriptive Phase
+#### Gemini AI Conceptual Validation
+### Level-3: Terminal Sandbox
+#### Hands-on Execution
+#### Linux / Docker / Kubernetes / Python
+## 📊 Organizational Strategy
+### New Hires: Gatekeeper
+### Tenured: Skill Gap Analysis
+### VMO Dashboard: Results of TSRs/SMEs across sites / specializations
+`.trim();
+
+    // Transform Markdown to Markmap data
+    const { root } = transformer.transform(markdown);
+
+    // Create the View using the explicit Markmap global
+    const mm = markmap.Markmap.create('#mindmap', {
+      initialExpandLevel: 2,
+      duration: 300
+    }, root);
+
+    // Auto-fit to screen
+    window.addEventListener('resize', () => mm.fit());
+    setTimeout(() => mm.fit(), 300);
+  </script>
+</body>
+</html>
